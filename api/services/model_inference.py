@@ -1,6 +1,7 @@
 """
 Model inference service for Hunyuan3D-2mini.
 Handles pipeline loading, GPU optimization, and 3D generation.
+Includes automatic low-poly mesh optimization for game engines.
 """
 
 import io
@@ -17,11 +18,10 @@ from config.settings import (
     MODEL_SUBFOLDER,
     OUTPUT_DIR,
     DEVICE,
-    INFERENCE_STEPS,
-    OCTREE_RESOLUTION,
     NUM_CHUNKS,
     SEED,
 )
+from services.mesh_optimizer import MeshOptimizer
 
 logger = logging.getLogger(__name__)
 
@@ -76,16 +76,26 @@ class ModelInferenceService:
             ModelInferenceService._pipeline = None
 
     # ── public API ──────────────────────────────────────────────────────────
-    def generate_3d(self, image_bytes: bytes) -> str:
+    def generate_3d(self, image_bytes: bytes, quality_preset: dict) -> str:
         """
-        Convert a 2D image to a 3D GLB model.
+        Convert a 2D image to a 3D GLB model using the given quality preset.
+
+        Pipeline:
+        1. Run Hunyuan3D-2mini inference with preset-specific parameters
+        2. Apply quadric decimation + mesh cleanup for game-ready output
+        3. Export optimized mesh as .glb
 
         Args:
-            image_bytes: Raw bytes of the uploaded image.
+            image_bytes:     Raw bytes of the uploaded image.
+            quality_preset:  Dict with keys: inference_steps, octree_resolution, target_faces.
 
         Returns:
             Absolute path to the generated .glb file.
         """
+        inference_steps = quality_preset["inference_steps"]
+        octree_resolution = quality_preset["octree_resolution"]
+        target_faces = quality_preset["target_faces"]
+
         image = Image.open(io.BytesIO(image_bytes)).convert("RGBA")
 
         output_filename = f"{uuid.uuid4().hex}.glb"
@@ -99,17 +109,27 @@ class ModelInferenceService:
             return output_path
 
         # ── Real inference ──────────────────────────────────────────────
-        logger.info("Running inference (%d steps) …", INFERENCE_STEPS)
+        logger.info(
+            "Running inference (%d steps, octree %d, target %d faces) …",
+            inference_steps,
+            octree_resolution,
+            target_faces,
+        )
 
         with torch.inference_mode():
             mesh = ModelInferenceService._pipeline(
                 image=image,
-                num_inference_steps=INFERENCE_STEPS,
-                octree_resolution=OCTREE_RESOLUTION,
+                num_inference_steps=inference_steps,
+                octree_resolution=octree_resolution,
                 num_chunks=NUM_CHUNKS,
                 generator=torch.manual_seed(SEED),
                 output_type="trimesh",
             )[0]
+
+        # ── Low-poly optimization (runs on CPU, no VRAM needed) ─────────
+        logger.info("Optimizing mesh for game-engine use …")
+        optimizer = MeshOptimizer(target_faces=target_faces)
+        mesh = optimizer.optimize(mesh)
 
         # Export to GLB
         if isinstance(mesh, trimesh.Scene):

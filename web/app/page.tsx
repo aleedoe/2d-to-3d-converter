@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import ImageUploader from "@/components/ImageUploader";
+import QualitySelector, { type Quality } from "@/components/QualitySelector";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Sparkles, Download, RotateCcw, Box } from "lucide-react";
@@ -24,6 +25,7 @@ type AppState = "idle" | "ready" | "loading" | "done" | "error";
 export default function Home() {
   const [state, setState] = useState<AppState>("idle");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [quality, setQuality] = useState<Quality>("mid");
   const [modelUrl, setModelUrl] = useState<string | null>(null);
   const [modelBlob, setModelBlob] = useState<Blob | null>(null);
   const [errorMsg, setErrorMsg] = useState<string>("");
@@ -50,6 +52,7 @@ export default function Home() {
     try {
       const formData = new FormData();
       formData.append("image", selectedFile);
+      formData.append("quality", quality);
 
       // Call Flask directly to bypass the Next.js rewrite proxy timeout
       const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
@@ -87,7 +90,7 @@ export default function Home() {
       }
       setState("error");
     }
-  }, [selectedFile]);
+  }, [selectedFile, quality]);
 
   const handleDownload = useCallback(() => {
     if (!modelBlob) return;
@@ -169,6 +172,13 @@ export default function Home() {
 
             <ImageUploader
               onImageSelected={handleImageSelected}
+              disabled={isLoading}
+            />
+
+            {/* Quality selector */}
+            <QualitySelector
+              value={quality}
+              onChange={setQuality}
               disabled={isLoading}
             />
 

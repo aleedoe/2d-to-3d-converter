@@ -16,11 +16,33 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 MODEL_SUBFOLDER = "hunyuan3d-dit-v2-mini"
 MODEL_REPO = "tencent/Hunyuan3D-2mini"
 
-# ─── Inference Defaults (tuned for RTX 4050) ────────────────────────────────────
-INFERENCE_STEPS = 30
-OCTREE_RESOLUTION = 380
+# ─── Quality Presets (Low / Mid / High) ──────────────────────────────────────────
+# Each preset controls both AI generation density and post-processing decimation.
+QUALITY_PRESETS = {
+    "low": {
+        "inference_steps": 20,
+        "octree_resolution": 192,
+        "target_faces": 2_000,
+    },
+    "mid": {
+        "inference_steps": 25,
+        "octree_resolution": 256,
+        "target_faces": 5_000,
+    },
+    "high": {
+        "inference_steps": 35,
+        "octree_resolution": 380,
+        "target_faces": 15_000,
+    },
+}
+DEFAULT_QUALITY = "mid"
+
+# ─── Shared Inference Constants (tuned for RTX 4050) ─────────────────────────────
 NUM_CHUNKS = 20000  # chunked processing keeps VRAM under control
 SEED = 12345
+
+# ─── Mesh Optimization ──────────────────────────────────────────────────────────
+ENABLE_MESH_OPTIMIZATION = True
 
 # ─── CUDA / Hardware ────────────────────────────────────────────────────────────
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
