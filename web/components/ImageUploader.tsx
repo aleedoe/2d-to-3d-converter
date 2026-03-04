@@ -51,8 +51,8 @@ export default function ImageUploader({
           ${isDragActive
                         ? "border-violet-500 bg-violet-500/10 scale-[1.02]"
                         : preview
-                            ? "border-white/20 bg-white/5"
-                            : "border-white/10 bg-white/3 hover:border-white/25 hover:bg-white/6"
+                            ? "border-foreground/20 bg-foreground/5"
+                            : "border-foreground/10 bg-foreground/3 hover:border-foreground/25 hover:bg-foreground/6"
                     }
           ${disabled ? "opacity-50 pointer-events-none" : ""}
         `}
@@ -70,14 +70,14 @@ export default function ImageUploader({
                         />
                         <button
                             onClick={clearImage}
-                            className="absolute top-3 right-3 p-1.5 rounded-full bg-black/60 backdrop-blur-sm
-                         border border-white/10 text-white/70 hover:text-white hover:bg-black/80
+                            className="absolute top-3 right-3 p-1.5 rounded-full bg-background/80 backdrop-blur-sm
+                         border border-border text-foreground/70 hover:text-foreground hover:bg-background
                          transition-colors"
                         >
                             <X className="w-4 h-4" />
                         </button>
                         <div className="absolute bottom-3 left-3 right-3">
-                            <p className="text-xs text-white/50 truncate bg-black/40 backdrop-blur-sm rounded-md px-3 py-1.5">
+                            <p className="text-xs text-foreground/50 truncate bg-background/70 backdrop-blur-sm rounded-md px-3 py-1.5">
                                 {fileName}
                             </p>
                         </div>
@@ -90,7 +90,7 @@ export default function ImageUploader({
                 p-4 rounded-2xl transition-all duration-300
                 ${isDragActive
                                     ? "bg-violet-500/20 text-violet-400"
-                                    : "bg-white/6 text-white/40 group-hover:text-white/60"
+                                    : "bg-foreground/6 text-foreground/40 group-hover:text-foreground/60"
                                 }
               `}
                         >
@@ -102,18 +102,18 @@ export default function ImageUploader({
                         </div>
 
                         <div className="text-center space-y-1.5">
-                            <p className="text-sm font-medium text-white/70">
+                            <p className="text-sm font-medium text-foreground/70">
                                 {isDragActive
                                     ? "Drop your image here"
                                     : "Drag & drop your 2D image"}
                             </p>
-                            <p className="text-xs text-white/40">
+                            <p className="text-xs text-muted-foreground">
                                 PNG, JPG, or WebP — up to 16 MB
                             </p>
                         </div>
 
                         {!isDragActive && (
-                            <span className="text-xs text-white/30 px-3 py-1 rounded-full border border-white/10">
+                            <span className="text-xs text-foreground/30 px-3 py-1 rounded-full border border-foreground/10">
                                 or click to browse
                             </span>
                         )}

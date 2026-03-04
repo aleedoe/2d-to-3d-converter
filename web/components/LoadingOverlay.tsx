@@ -67,7 +67,7 @@ export default function LoadingOverlay({ isVisible }: LoadingOverlayProps) {
             : "Almost there…";
 
     return (
-        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md rounded-2xl">
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-md rounded-2xl">
             <div className="flex flex-col items-center gap-6 px-8 py-10 max-w-xs w-full">
                 {/* Spinner */}
                 <div className="relative">
@@ -76,7 +76,7 @@ export default function LoadingOverlay({ isVisible }: LoadingOverlayProps) {
                 </div>
 
                 {/* Stage label */}
-                <p className="text-sm font-medium text-white/80 text-center">
+                <p className="text-sm font-medium text-foreground/80 text-center">
                     {currentLabel}
                 </p>
 
@@ -84,9 +84,9 @@ export default function LoadingOverlay({ isVisible }: LoadingOverlayProps) {
                 <div className="w-full space-y-2">
                     <Progress
                         value={progress}
-                        className="h-1.5 bg-white/10 [&>div]:bg-linear-to-r [&>div]:from-violet-500 [&>div]:to-fuchsia-500 [&>div]:transition-all [&>div]:duration-300"
+                        className="h-1.5 bg-foreground/10 [&>div]:bg-linear-to-r [&>div]:from-violet-500 [&>div]:to-fuchsia-500 [&>div]:transition-all [&>div]:duration-300"
                     />
-                    <p className="text-xs text-white/40 text-center">{progress}%</p>
+                    <p className="text-xs text-muted-foreground text-center">{progress}%</p>
                 </div>
             </div>
         </div>

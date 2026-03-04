@@ -7,13 +7,14 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import ImageUploader from "@/components/ImageUploader";
 import LoadingOverlay from "@/components/LoadingOverlay";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Sparkles, Download, RotateCcw, Box } from "lucide-react";
 
 const ModelViewer = dynamic(() => import("@/components/ModelViewer"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full min-h-[400px] rounded-2xl bg-white/3 border border-white/10 flex items-center justify-center">
-      <Box className="w-8 h-8 text-white/20 animate-pulse" />
+    <div className="w-full h-full min-h-[400px] rounded-2xl bg-foreground/3 border border-border flex items-center justify-center">
+      <Box className="w-8 h-8 text-foreground/20 animate-pulse" />
     </div>
   ),
 });
@@ -119,33 +120,36 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-background">
       {/* ─── Header ───────────────────────────────────────────────── */}
-      <header className="border-b border-white/6 bg-white/2 backdrop-blur-xl sticky top-0 z-40">
+      <header className="border-b border-border bg-background/80 backdrop-blur-xl sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-xl bg-linear-to-br from-violet-600 to-fuchsia-600">
               <Box className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-base font-semibold text-white tracking-tight">
+              <h1 className="text-base font-semibold text-foreground tracking-tight">
                 2D → 3D Converter
               </h1>
-              <p className="text-[11px] text-white/40 -mt-0.5">
+              <p className="text-[11px] text-muted-foreground -mt-0.5">
                 Powered by Hunyuan3D
               </p>
             </div>
           </div>
 
-          {state === "done" && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleReset}
-              className="text-white/50 hover:text-white"
-            >
-              <RotateCcw className="w-4 h-4 mr-2" />
-              New
-            </Button>
-          )}
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            {state === "done" && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleReset}
+                className="text-foreground/50 hover:text-foreground"
+              >
+                <RotateCcw className="w-4 h-4 mr-2" />
+                New
+              </Button>
+            )}
+          </div>
         </div>
       </header>
 
@@ -153,15 +157,15 @@ export default function Home() {
       <div className="max-w-7xl mx-auto px-6 py-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* ── Left Panel: Upload ────────────────────────────────── */}
-          <Card className="bg-white/3 border-white/8 p-6 space-y-6">
+          <Card className="bg-card border-border p-6 space-y-6">
             <div>
-              <h2 className="text-sm font-medium text-white/80">Input Image</h2>
-              <p className="text-xs text-white/40 mt-1">
+              <h2 className="text-sm font-medium text-foreground/80">Input Image</h2>
+              <p className="text-xs text-muted-foreground mt-1">
                 Upload a 2D image to convert into a 3D model
               </p>
             </div>
 
-            <Separator className="bg-white/6" />
+            <Separator className="bg-border" />
 
             <ImageUploader
               onImageSelected={handleImageSelected}
@@ -171,7 +175,7 @@ export default function Home() {
             {/* Error message */}
             {state === "error" && errorMsg && (
               <div className="rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3">
-                <p className="text-xs text-red-400">{errorMsg}</p>
+                <p className="text-xs text-red-400 dark:text-red-400">{errorMsg}</p>
               </div>
             )}
 
@@ -190,13 +194,13 @@ export default function Home() {
           </Card>
 
           {/* ── Right Panel: 3D Preview ──────────────────────────── */}
-          <Card className="bg-white/3 border-white/8 p-6 space-y-6 relative overflow-hidden">
+          <Card className="bg-card border-border p-6 space-y-6 relative overflow-hidden">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-sm font-medium text-white/80">
+                <h2 className="text-sm font-medium text-foreground/80">
                   3D Preview
                 </h2>
-                <p className="text-xs text-white/40 mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   {state === "done"
                     ? "Rotate, pan & zoom to inspect"
                     : "Your generated model will appear here"}
@@ -207,7 +211,7 @@ export default function Home() {
                 <Button
                   onClick={handleDownload}
                   size="sm"
-                  className="bg-white/10 hover:bg-white/15 text-white border border-white/10
+                  className="bg-foreground/10 hover:bg-foreground/15 text-foreground border border-border
                              rounded-xl transition-all duration-200"
                 >
                   <Download className="w-4 h-4 mr-2" />
@@ -216,15 +220,15 @@ export default function Home() {
               )}
             </div>
 
-            <Separator className="bg-white/6" />
+            <Separator className="bg-border" />
 
             {/* 3D Canvas / Placeholder */}
             {modelUrl ? (
               <ModelViewer modelUrl={modelUrl} />
             ) : (
-              <div className="w-full min-h-[400px] rounded-2xl bg-white/2 border border-white/6 flex flex-col items-center justify-center gap-3">
-                <Box className="w-10 h-10 text-white/10" />
-                <p className="text-xs text-white/20">No model yet</p>
+              <div className="w-full min-h-[400px] rounded-2xl bg-foreground/2 border border-border flex flex-col items-center justify-center gap-3">
+                <Box className="w-10 h-10 text-foreground/10" />
+                <p className="text-xs text-foreground/20">No model yet</p>
               </div>
             )}
 

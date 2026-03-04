@@ -123,6 +123,13 @@
     @apply bg-background text-foreground;
     background-image: radial-gradient(
       ellipse 80% 50% at 50% -20%,
+      oklch(0.7 0.1 280 / 0.08),
+      transparent
+    );
+  }
+  .dark body {
+    background-image: radial-gradient(
+      ellipse 80% 50% at 50% -20%,
       oklch(0.3 0.15 280 / 0.15),
       transparent
     );
