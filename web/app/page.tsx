@@ -41,14 +41,25 @@ export default function Home() {
     setState("loading");
     setErrorMsg("");
 
+    // 5-minute timeout — Hunyuan3D inference can take 1-2 min
+    const TIMEOUT_MS = 5 * 60 * 1000;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
     try {
       const formData = new FormData();
       formData.append("image", selectedFile);
 
-      const res = await fetch("/api/generate-3d", {
+      // Call Flask directly to bypass the Next.js rewrite proxy timeout
+      const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
+      const res = await fetch(`${apiBase}/api/generate-3d`, {
         method: "POST",
         body: formData,
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -62,8 +73,17 @@ export default function Home() {
       setModelUrl(url);
       setState("done");
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Something went wrong";
-      setErrorMsg(message);
+      clearTimeout(timeoutId);
+
+      if (err instanceof DOMException && err.name === "AbortError") {
+        setErrorMsg("Request timed out after 5 minutes. The model may be overloaded — try again.");
+      } else if (err instanceof TypeError) {
+        // Network error (backend unreachable, CORS, connection refused)
+        setErrorMsg("Cannot reach the backend. Make sure the Flask server is running on port 5000.");
+      } else {
+        const message = err instanceof Error ? err.message : "Something went wrong";
+        setErrorMsg(message);
+      }
       setState("error");
     }
   }, [selectedFile]);
