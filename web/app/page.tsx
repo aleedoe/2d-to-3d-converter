@@ -12,7 +12,7 @@ import { Sparkles, Download, RotateCcw, Box } from "lucide-react";
 const ModelViewer = dynamic(() => import("@/components/ModelViewer"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full min-h-[400px] rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center">
+    <div className="w-full h-full min-h-[400px] rounded-2xl bg-white/3 border border-white/10 flex items-center justify-center">
       <Box className="w-8 h-8 text-white/20 animate-pulse" />
     </div>
   ),
@@ -99,10 +99,10 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-background">
       {/* ─── Header ───────────────────────────────────────────────── */}
-      <header className="border-b border-white/[0.06] bg-white/[0.02] backdrop-blur-xl sticky top-0 z-40">
+      <header className="border-b border-white/6 bg-white/2 backdrop-blur-xl sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600">
+            <div className="p-2 rounded-xl bg-linear-to-br from-violet-600 to-fuchsia-600">
               <Box className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -133,7 +133,7 @@ export default function Home() {
       <div className="max-w-7xl mx-auto px-6 py-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* ── Left Panel: Upload ────────────────────────────────── */}
-          <Card className="bg-white/[0.03] border-white/[0.08] p-6 space-y-6">
+          <Card className="bg-white/3 border-white/8 p-6 space-y-6">
             <div>
               <h2 className="text-sm font-medium text-white/80">Input Image</h2>
               <p className="text-xs text-white/40 mt-1">
@@ -141,7 +141,7 @@ export default function Home() {
               </p>
             </div>
 
-            <Separator className="bg-white/[0.06]" />
+            <Separator className="bg-white/6" />
 
             <ImageUploader
               onImageSelected={handleImageSelected}
@@ -159,7 +159,7 @@ export default function Home() {
             <Button
               onClick={handleGenerate}
               disabled={!canGenerate}
-              className="w-full h-12 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600
+              className="w-full h-12 rounded-xl bg-linear-to-r from-violet-600 to-fuchsia-600
                          hover:from-violet-500 hover:to-fuchsia-500 text-white font-medium
                          shadow-lg shadow-violet-500/20 transition-all duration-300
                          disabled:opacity-40 disabled:shadow-none disabled:cursor-not-allowed"
@@ -170,7 +170,7 @@ export default function Home() {
           </Card>
 
           {/* ── Right Panel: 3D Preview ──────────────────────────── */}
-          <Card className="bg-white/[0.03] border-white/[0.08] p-6 space-y-6 relative overflow-hidden">
+          <Card className="bg-white/3 border-white/8 p-6 space-y-6 relative overflow-hidden">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-sm font-medium text-white/80">
@@ -196,13 +196,13 @@ export default function Home() {
               )}
             </div>
 
-            <Separator className="bg-white/[0.06]" />
+            <Separator className="bg-white/6" />
 
             {/* 3D Canvas / Placeholder */}
             {modelUrl ? (
               <ModelViewer modelUrl={modelUrl} />
             ) : (
-              <div className="w-full min-h-[400px] rounded-2xl bg-white/[0.02] border border-white/[0.06] flex flex-col items-center justify-center gap-3">
+              <div className="w-full min-h-[400px] rounded-2xl bg-white/2 border border-white/6 flex flex-col items-center justify-center gap-3">
                 <Box className="w-10 h-10 text-white/10" />
                 <p className="text-xs text-white/20">No model yet</p>
               </div>

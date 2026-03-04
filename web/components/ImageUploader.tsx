@@ -52,7 +52,7 @@ export default function ImageUploader({
                         ? "border-violet-500 bg-violet-500/10 scale-[1.02]"
                         : preview
                             ? "border-white/20 bg-white/5"
-                            : "border-white/10 bg-white/[0.03] hover:border-white/25 hover:bg-white/[0.06]"
+                            : "border-white/10 bg-white/3 hover:border-white/25 hover:bg-white/6"
                     }
           ${disabled ? "opacity-50 pointer-events-none" : ""}
         `}
@@ -90,7 +90,7 @@ export default function ImageUploader({
                 p-4 rounded-2xl transition-all duration-300
                 ${isDragActive
                                     ? "bg-violet-500/20 text-violet-400"
-                                    : "bg-white/[0.06] text-white/40 group-hover:text-white/60"
+                                    : "bg-white/6 text-white/40 group-hover:text-white/60"
                                 }
               `}
                         >

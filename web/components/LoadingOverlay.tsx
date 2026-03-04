@@ -84,7 +84,7 @@ export default function LoadingOverlay({ isVisible }: LoadingOverlayProps) {
                 <div className="w-full space-y-2">
                     <Progress
                         value={progress}
-                        className="h-1.5 bg-white/10 [&>div]:bg-gradient-to-r [&>div]:from-violet-500 [&>div]:to-fuchsia-500 [&>div]:transition-all [&>div]:duration-300"
+                        className="h-1.5 bg-white/10 [&>div]:bg-linear-to-r [&>div]:from-violet-500 [&>div]:to-fuchsia-500 [&>div]:transition-all [&>div]:duration-300"
                     />
                     <p className="text-xs text-white/40 text-center">{progress}%</p>
                 </div>

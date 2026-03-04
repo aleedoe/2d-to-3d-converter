@@ -30,7 +30,7 @@ export default function ModelViewer({ modelUrl }: ModelViewerProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     return (
-        <div className="w-full h-full min-h-[400px] rounded-2xl overflow-hidden bg-gradient-to-b from-neutral-900 to-neutral-950 border border-white/10">
+        <div className="w-full h-full min-h-[400px] rounded-2xl overflow-hidden bg-linear-to-b from-neutral-900 to-neutral-950 border border-white/10">
             <Canvas
                 ref={canvasRef}
                 camera={{ position: [0, 1.5, 3], fov: 45 }}
